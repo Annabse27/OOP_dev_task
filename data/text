@@ -1,0 +1,9 @@
+
+categories = []
+for category in data:
+    products = []
+    for product in category['products']:
+        print(product)
+        products.append(Product(**product))
+    category['products'] = products
+    categories.append(Category(**category))
