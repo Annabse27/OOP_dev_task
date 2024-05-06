@@ -15,6 +15,7 @@ def product_obj():
         5
     )
 
+
 @pytest.fixture
 def product_obj_new():
     return Product(
@@ -47,18 +48,30 @@ def category2():
         ]
     )
 
+
 @pytest.fixture
 def smartphone_1():
     return Smartphone('Test_smart1', 'Test_smart1', 1000, 10, 1.5, 'Model1', 10000, 'red')
+
 
 @pytest.fixture
 def smartphone_2():
     return Smartphone('Test_smart2', 'Test_smart2', 2000, 20, 2.5, 'Model2', 20000, 'black')
 
+
 @pytest.fixture
 def lawngrass_1():
     return LawnGrass('Test_grass1', 'Test_grass1', 3000, 30, 'Canada', '1 year', 'light green')
 
+
 @pytest.fixture
 def lawngrass_2():
     return LawnGrass('Test_grass2', 'Test_grass2', 4000, 40, 'France', '2 years', 'dark green')
+
+
+@pytest.fixture
+def categories_sans_produits():
+    return Category(
+        name="PC",
+        description="PC в целом"
+    )

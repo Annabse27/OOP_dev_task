@@ -1,6 +1,7 @@
 from src_dev.base_product import BaseProduct
 from src_dev.print_mixin import PrintMixin
 
+
 class Product(BaseProduct, PrintMixin):
     """
     Класс для учета продуктов по группам
@@ -17,7 +18,10 @@ class Product(BaseProduct, PrintMixin):
         self.name = name
         self.description = description
         self.__price = price
-        self.quantity = quantity
+        if quantity:
+            self.quantity = quantity
+        else:
+            raise ValueError("Товар с нулевым количеством не может быть добавлен")
         super().__init__()
 
     def __str__(self):
@@ -34,7 +38,6 @@ class Product(BaseProduct, PrintMixin):
         if type(other) is Product:
             return self.__price * self.quantity + other.price * other.quantity
         raise TypeError
-
 
     @classmethod
     def new_product(cls, product_dict: dict):
@@ -93,10 +96,9 @@ if __name__ == "__main__":
 
     print(product + new_product)
 
-
     product_item = Product('Test', 'Test', 1000, 10)
-    #product_item_2 = Smartphone('Test2', 'Test2', 2000, 10, 1.5, 'Xiaomi', 10000, 'red')
-    #product_item_3 = LawnGrass('Test3', 'Test3', 3000, 10, 'Canada', '1 year', 'light green')
+    # product_item_2 = Smartphone('Test2', 'Test2', 2000, 10, 1.5, 'Xiaomi', 10000, 'red')
+    # product_item_3 = LawnGrass('Test3', 'Test3', 3000, 10, 'Canada', '1 year', 'light green')
 
     product_data = {
         'name': 'New Product',
@@ -106,3 +108,17 @@ if __name__ == "__main__":
     }
 
     new_product = Product.new_product(product_data)
+
+    try:
+        product_user = {
+            'name': 'User Product',
+            'description': 'User Description',
+            'price': 500,
+            'quantity': 0
+        }
+        product_user_zero = Product.new_product(product_user)
+    except ValueError as e:
+        #print("Товар с нулевым количеством не может быть добавлен")
+        print(str(e) == "Товар с нулевым количеством не может быть добавлен")
+
+
