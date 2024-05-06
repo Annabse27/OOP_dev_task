@@ -1,5 +1,5 @@
 from src_dev.product_dev import Product
-
+from src_dev.zero_product_add import ZeroProductAdd
 
 class Category:
     """
@@ -36,6 +36,9 @@ class Category:
         return self.tout_de_touts() + other.tout_de_touts()
 
     def tout_de_touts(self):
+        """
+        метод, который считает внутри КОНКРЕТНОЙ отдельновзятой категории всю стоимость группы продуктов
+        """
         if self.product_in_list:
             arr = []
             for item in self.product_in_list:
@@ -69,10 +72,20 @@ class Category:
         метод-сеттер для добавления товара (в виде экземпляра класса) в группу
         """
         if isinstance(new_product, Product):
-            self.__products.append(new_product)
-            Category.count_product += 1
+            try:
+                if new_product.quantity < 0:
+                    raise ZeroProductAdd("Нельзя добавлять несуществующий продукт")
+            except ZeroProductAdd as err:
+                print(str(err))
+            else:
+                self.__products.append(new_product)
+                Category.count_product += 1
+                print("Продукт добавлен успешно")
+            finally:
+                print("Обработка завершена")
         else:
             raise TypeError
+
 
     @property
     def product_in_list(self):
@@ -80,6 +93,18 @@ class Category:
         метод-геттер для отображения остатка товара в формате list[]
         """
         return self.__products
+
+
+    def middle_price(self):
+        """
+        считает средний ценник продукта
+        """
+        try:
+            #return self.tout_de_touts()/sum(list(item.quantity for item in self.product_in_list))
+            return (sum(prod.price for prod in self.__products)) / len(self.__products)
+        except ZeroDivisionError:
+            return 0
+
 
 
 if __name__ == "__main__":
@@ -130,7 +155,17 @@ if __name__ == "__main__":
     print(category2)
 
     print()
-    print((category.tout_de_touts() + category2.tout_de_touts()))
+
+    print(category2.middle_price())
+    print(category.middle_price())
+
+    #Проверки к последней devoirs
+
+    product7 = Product('1','1', 10, -5)
+    category2.products = product7
+
+    category_null = Category('Test', 'Test', [])
+    print(category_null.middle_price() == 0)
 
 
 
